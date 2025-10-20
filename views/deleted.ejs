@@ -1,19 +1,66 @@
-
 <h2>Удалённые сообщения (последние 500)</h2>
+
 <table class="tbl">
-  <thead><tr><th>ID</th><th>Чат</th><th>Автор</th><th>MsgID</th><th>Тип</th><th>Текст</th><th>Время</th><th>Удалено</th></tr></thead>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Чат</th>
+      <th>Автор</th>
+      <th>Тип</th>
+      <th>Текст / Медиа</th>
+      <th>Время</th>
+	  <th>Действие</th>
+    </tr>
+  </thead>
   <tbody>
-    <% rows.forEach(r=>{ %>
+    <% rows.forEach(r => { %>
       <tr>
         <td><%= r.id %></td>
         <td><%= r.chat_id %></td>
         <td><%= r.author_id || '' %></td>
-        <td><%= r.message_id %></td>
         <td><%= r.message_type %></td>
-        <td><pre><%= r.body || '' %></pre></td>
-        <td><%= r.timestamp_ms ? new Date(r.timestamp_ms).toISOString() : '' %></td>
-        <td><%= r.deleted_at %></td>
-      </tr>
+        <td>
+          <% if (r.body && r.body.startsWith('[MEDIA:')) { 
+               const pathMatch = r.body.match(/\[MEDIA:\s*(.*)\]/);
+               const filePath = pathMatch ? pathMatch[1] : null;
+               const fileName = filePath ? filePath.split(/[/\\]/).pop() : null;
+               const ext = fileName ? fileName.split('.').pop().toLowerCase() : '';
+          %>
+              <% if (['jpg','jpeg','png','gif','webp'].includes(ext)) { %>
+                <a href="/deleted_media/<%= fileName %>" target="_blank">
+                  <img src="/deleted_media/<%= fileName %>" alt="deleted image" style="max-width:120px; max-height:120px; border-radius:6px;">
+                </a>
+              <% } else if (['mp4','mov','webm','avi'].includes(ext)) { %>
+                <video src="/deleted_media/<%= fileName %>" controls style="max-width:200px; max-height:150px;"></video>
+              <% } else { %>
+                <a href="/deleted_media/<%= fileName %>" target="_blank">📎 Скачать <%= fileName %></a>
+              <% } %>
+          <% } else { %>
+              <pre><%= r.body || '' %></pre>
+          <% } %>
+        </td>
+        <td><%= r.timestamp_ms ? new Date(r.timestamp_ms).toLocaleString() : '' %></td>
+      
+	  <td>
+  <button class="del-btn" data-id="<%= r.id %>">Удалить</button>
+</td>
+	  </tr>
     <% }) %>
   </tbody>
 </table>
+<script>
+document.querySelectorAll('.del-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    if (!confirm('Удалить это сообщение и медиафайл?')) return;
+    const id = btn.dataset.id;
+    const res = await fetch(`/deleted/delete/${id}`, { method: 'POST' });
+    const data = await res.json();
+    if (data.ok) {
+      alert('Удалено');
+      location.reload();
+    } else {
+      alert('Ошибка: ' + data.error);
+    }
+  });
+});
+</script>

@@ -19,3 +19,9 @@ button:hover{ filter:brightness(1.1); }
 .login{ max-width:360px; margin:60px auto; padding:16px; background:var(--card); border-radius:12px; }
 .login .error{ background:#4b0000; color:#fbb; padding:8px; margin-bottom:8px; border-radius:8px; }
 .hint{ color:var(--muted); font-size:12px; }
+.tbl img, .tbl video {
+  display: block;
+  margin: 4px auto;
+  border: 1px solid #333;
+  border-radius: 8px;
+}

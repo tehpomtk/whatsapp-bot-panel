@@ -18,6 +18,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(expressLayouts);              // ✅ активируем шаблонизатор с layout
 app.set('layout', 'layout');          // ✅ файл макета layout.ejs
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/deleted_media', express.static(path.join(__dirname, 'deleted_media')));
 
 // ---------- Парсеры ----------
 app.use(express.urlencoded({ extended: true }));

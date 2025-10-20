@@ -42,18 +42,48 @@ client.on('auth_failure', (m)=>console.error('WA ошибка авторизац
 client.on('disconnected', ()=>{ waReady=false; console.log('WA отключено'); });
 
 // -------------- Удаленые сообщения --------------
+const fs = require('fs');
+
 client.on('message_revoke_everyone', async (after, before) => {
-  // 'after' is the after-revocation message; 'before' is the original message
   const msg = before || after;
   try {
     const chatId = msg.from;
     const author = msg.author || msg.from;
-    db.prepare(`INSERT INTO deleted_messages (chat_id, author_id, message_id, message_type, body, timestamp_ms)
-                VALUES (?, ?, ?, ?, ?, ?)`)
-      .run(chatId, author, msg.id._serialized, msg.type, msg.body || null, msg.timestamp ? msg.timestamp*1000 : null);
-    console.log(`записано удаленное сообщение от  ${author} или ${chatId}`);
-  } catch (e) { console.error('ошибка добавления в лог удаленного сообщения:', e); }
+
+    let filePath = null;
+    let type = msg.type;
+    let body = msg.body || null;
+
+    // --- если удалено медиа (изображение, видео, документ и т.д.) ---
+    if (msg.hasMedia) {
+      const media = await msg.downloadMedia();
+      if (media && media.data) {
+        const folder = path.join(__dirname, 'public', 'deleted_media');
+        if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
+
+        const filename = `${Date.now()}_${msg.id.id}.${media.mimetype.split('/')[1]}`;
+        filePath = path.join(folder, filename);
+
+        // Сохраняем файл в base64 → бинарный
+        fs.writeFileSync(filePath, Buffer.from(media.data, 'base64'));
+        body = `[MEDIA: ${filePath}]`;
+      }
+    }
+
+    db.prepare(`
+      INSERT INTO deleted_messages
+        (chat_id, author_id, message_id, message_type, body, timestamp_ms)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(chatId, author, msg.id._serialized, type, body, msg.timestamp ? msg.timestamp * 1000 : null);
+
+    console.log(`🗑️ Logged deleted message from ${author} (${type})`);
+  } catch (e) {
+    console.error('Failed to log deleted message:', e);
+  }
 });
+
+
+
 
 // -------------- шукнция отлова звонков --------------
 client.on('call', async (call) => {
