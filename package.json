@@ -1,0 +1,23 @@
+{
+  "name": "whatsapp-bot-panel",
+  "version": "1.0.0",
+  "description": "WhatsApp bot with web panel (port 5050), scheduler, deleted messages log, auto-replies, auth.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "better-sqlite3": "^9.4.0",
+    "connect-sqlite3": "^0.9.15",
+    "ejs": "^3.1.9",
+    "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.17.3",
+    "node-cron": "^3.0.3",
+    "qrcode": "^1.5.3",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.26.0"
+  }
+}

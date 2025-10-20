@@ -1,0 +1,19 @@
+
+<h2>Удалённые сообщения (последние 500)</h2>
+<table class="tbl">
+  <thead><tr><th>ID</th><th>Чат</th><th>Автор</th><th>MsgID</th><th>Тип</th><th>Текст</th><th>Время</th><th>Удалено</th></tr></thead>
+  <tbody>
+    <% rows.forEach(r=>{ %>
+      <tr>
+        <td><%= r.id %></td>
+        <td><%= r.chat_id %></td>
+        <td><%= r.author_id || '' %></td>
+        <td><%= r.message_id %></td>
+        <td><%= r.message_type %></td>
+        <td><pre><%= r.body || '' %></pre></td>
+        <td><%= r.timestamp_ms ? new Date(r.timestamp_ms).toISOString() : '' %></td>
+        <td><%= r.deleted_at %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

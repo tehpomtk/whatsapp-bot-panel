@@ -1,0 +1,29 @@
+
+<h2>Автоответы</h2>
+<form method="post" action="/templates/add" class="form-grid">
+  <input name="pattern" placeholder="Триггер (подстрока или RegExp)" required>
+  <label><input type="checkbox" name="is_regex" value="1"> RegExp</label>
+  <input name="reply" placeholder="Текст ответа" required>
+  <input name="scope" placeholder="Область (all или chatId)" value="all">
+  <button type="submit">Добавить</button>
+</form>
+
+<table class="tbl">
+  <thead><tr><th>ID</th><th>Паттерн</th><th>RegExp</th><th>Ответ</th><th>Область</th><th>Активен</th><th>Действия</th></tr></thead>
+  <tbody>
+    <% rules.forEach(r=>{ %>
+      <tr>
+        <td><%= r.id %></td>
+        <td><pre><%= r.pattern %></pre></td>
+        <td><%= r.is_regex ? 'Да' : 'Нет' %></td>
+        <td><pre><%= r.reply %></pre></td>
+        <td><%= r.scope %></td>
+        <td><%= r.active ? 'Да' : 'Нет' %></td>
+        <td>
+          <form method="post" action="/templates/toggle/<%= r.id %>" style="display:inline"><button>Вкл/Выкл</button></form>
+          <form method="post" action="/templates/delete/<%= r.id %>" style="display:inline" onsubmit="return confirm('Удалить?')"><button>Удалить</button></form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

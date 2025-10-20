@@ -1,0 +1,30 @@
+
+<h2>Планировщик сообщений</h2>
+<form method="post" action="/scheduler/add" class="form-grid">
+  <input name="chat_id" placeholder="Чат ID (7701...@c.us)" required>
+  <input name="message" placeholder="Сообщение" required>
+  <input name="cron" placeholder="CRON (например: */10 * * * *)">
+  <input name="run_at" placeholder="Разовая дата-время (YYYY-MM-DD HH:MM)">
+  <button type="submit">Добавить</button>
+</form>
+
+<table class="tbl">
+  <thead><tr><th>ID</th><th>Чат</th><th>Сообщение</th><th>CRON</th><th>RunAt</th><th>Вкл</th><th>Последний запуск</th><th>Действия</th></tr></thead>
+  <tbody>
+    <% rows.forEach(r=>{ %>
+      <tr>
+        <td><%= r.id %></td>
+        <td><%= r.chat_id %></td>
+        <td><pre><%= r.message %></pre></td>
+        <td><%= r.cron || '' %></td>
+        <td><%= r.run_at || '' %></td>
+        <td><%= r.enabled ? 'Да' : 'Нет' %></td>
+        <td><%= r.last_run_at || '' %></td>
+        <td>
+          <form method="post" action="/scheduler/toggle/<%= r.id %>" style="display:inline"><button>Вкл/Выкл</button></form>
+          <form method="post" action="/scheduler/delete/<%= r.id %>" style="display:inline" onsubmit="return confirm('Удалить?')"><button>Удалить</button></form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

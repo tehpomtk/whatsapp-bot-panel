@@ -1,0 +1,48 @@
+
+<section>
+  <h2>Статус</h2>
+  <ul class="stats">
+    <li>WA готов: <strong><%= stats.wa_ready ? 'Да' : 'Нет' %></strong></li>
+    <li>Шаблонов автоответа: <strong><%= stats.auto_replies %></strong></li>
+    <li>Планов сообщений: <strong><%= stats.scheduled %></strong></li>
+    <li>Лог удалённых: <strong><%= stats.deleted %></strong></li>
+  </ul>
+</section>
+
+<section>
+  <h2>QR для входа</h2>
+  <div id="qrBox">Загрузка...</div>
+</section>
+
+<section>
+  <h2>Быстрая отправка</h2>
+  <form id="sendForm">
+    <input name="chat_id" placeholder="7701xxxxxxx@c.us или <group_id>" required>
+    <input name="message" placeholder="Текст" required>
+    <button>Отправить</button>
+  </form>
+  <pre id="sendResult"></pre>
+</section>
+
+<script>
+async function loadQR(){
+  const box = document.getElementById('qrBox');
+  try{
+    const res = await fetch('/api/qr');
+    if(!res.ok){ box.textContent = 'QR недоступен (уже авторизовано?)'; return; }
+    const data = await res.json();
+    const img = new Image(); img.src = data.dataURL; img.style.maxWidth='260px';
+    box.innerHTML=''; box.appendChild(img);
+  }catch(e){ box.textContent='Ошибка загрузки QR'; }
+}
+loadQR();
+setInterval(loadQR, 10000);
+
+document.getElementById('sendForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const payload = Object.fromEntries(fd.entries());
+  const res = await fetch('/api/send', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+  document.getElementById('sendResult').textContent = await res.text();
+});
+</script>

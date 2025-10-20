@@ -1,0 +1,42 @@
+# --- Node.js ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- WhatsApp sessions (очень важно не заливать!) ---
+sessions/
+sessions_web.sqlite
+
+# --- SQLite базы данных ---
+*.sqlite
+data.sqlite
+
+# --- Логи ---
+*.log
+logs/
+pm2.log
+
+# --- Временные и кеш файлы ---
+tmp/
+temp/
+dist/
+coverage/
+
+# --- IDE и редакторы ---
+.vscode/
+.idea/
+
+# --- Системные файлы Windows / macOS ---
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# --- PM2 / Nodemon ---
+.pm2/
+nodemon.json
+
+# --- Lockfiles (если разные менеджеры пакетов) ---
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

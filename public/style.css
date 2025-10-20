@@ -1,0 +1,21 @@
+
+:root{ --bg:#121212; --fg:#ddd; --muted:#9aa; --accent:#6aa3ff; --card:#1c1c1c; }
+*{ box-sizing:border-box; }
+body{ margin:0; font:14px/1.4 system-ui,Segoe UI,Roboto; background:var(--bg); color:var(--fg); }
+header{ display:flex; align-items:center; gap:20px; padding:12px 16px; background:#0e0e0e; border-bottom:1px solid #222; }
+header h1{ font-size:18px; margin:0; }
+nav a{ color:var(--fg); text-decoration:none; margin-right:12px; padding:6px 8px; border-radius:8px; }
+nav a:hover{ background:#222; }
+main{ padding:16px; }
+section{ background:var(--card); padding:16px; border-radius:12px; margin-bottom:16px; }
+ul.stats{ list-style:none; display:flex; gap:16px; padding:0; }
+ul.stats li{ background:#161616; padding:8px 12px; border-radius:8px; }
+.tbl{ width:100%; border-collapse:collapse; }
+.tbl th,.tbl td{ border:1px solid #333; padding:8px; vertical-align:top; }
+.tbl pre{ margin:0; white-space:pre-wrap; }
+.form-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:12px; }
+button{ background:var(--accent); color:#000; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; }
+button:hover{ filter:brightness(1.1); }
+.login{ max-width:360px; margin:60px auto; padding:16px; background:var(--card); border-radius:12px; }
+.login .error{ background:#4b0000; color:#fbb; padding:8px; margin-bottom:8px; border-radius:8px; }
+.hint{ color:var(--muted); font-size:12px; }

@@ -1,0 +1,28 @@
+
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Панель бота</title>
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+  <header>
+    <h1>Панель бота</h1>
+    <nav>
+      <a href="/dashboard">Главная</a>
+      <a href="/templates">Автоответы</a>
+      <a href="/scheduler">Планировщик</a>
+      <a href="/deleted">Удалённые сообщения</a>
+      <a href="/logout">Выйти</a>
+    </nav>
+  </header>
+  <main>
+    <%- body %>
+  </main>
+  <footer>
+    <small>WhatsApp Bot Panel · порт 5050</small>
+  </footer>
+</body>
+</html>
